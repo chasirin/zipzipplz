@@ -20,16 +20,21 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const items = document.querySelectorAll('.nav-item');
 
+  // 마우스(hover 가능) 기기인지 판별 — 터치 기기에서는 hover 끔
+  const canHover = window.matchMedia('(hover: hover)').matches;
+
   items.forEach(item => {
     const trigger = item.querySelector(':scope > a');
     const dropdown = item.querySelector('.dropdown');
     if (!trigger || !dropdown) return; // CV처럼 드롭다운 없는 항목 제외
 
-    // 데스크톱: hover
-    item.addEventListener('mouseenter', () => item.classList.add('open'));
-    item.addEventListener('mouseleave', () => item.classList.remove('open'));
+    // 데스크톱(마우스)에서만 hover로 열기
+    if (canHover) {
+      item.addEventListener('mouseenter', () => item.classList.add('open'));
+      item.addEventListener('mouseleave', () => item.classList.remove('open'));
+    }
 
-    // 모바일/탭: 터치 또는 클릭으로 토글
+    // 탭/클릭으로 토글 (모바일은 이 한 번으로 바로 열림)
     trigger.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();

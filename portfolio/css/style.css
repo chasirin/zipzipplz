@@ -29,6 +29,9 @@ body {
   letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* 한국어: 어절(띄어쓰기) 단위 줄바꿈 / 긴 영문은 하이픈 */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 img { display: block; width: 100%; height: auto; }
@@ -105,10 +108,10 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: 100%;
   right: 0;
-  text-align: right;
-  min-width: 130px;
+  text-align: center;
+  min-width: 96px;
   background: #ffffff;
-  padding: 10px 14px 14px 14px;
+  padding: 10px 12px 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -132,6 +135,7 @@ a { color: inherit; text-decoration: none; }
   transition: color .2s;
   display: block;
   padding: 2px 0;
+  text-align: center;
 }
 .dropdown li a:hover { color: var(--fg); }
 .dropdown li a.active { color: var(--fg); font-weight: 600; }
@@ -420,6 +424,9 @@ body:not(.home-page) .contact-bar {
   .index-row .field, .index-list .head { display: none; }
   .cv-grid { grid-template-columns: 1fr; }
   .piece-info { grid-template-columns: 1fr; }
+  /* 작가 페이지: 정보(colophon) 바로 뒤 작품 갤러리 간격 축소 */
+  .colophon { padding-bottom: clamp(16px, 4vw, 28px); }
+  .colophon + .gallery { padding-top: clamp(8px, 3vw, 20px); }
 }
 @media (max-width: 560px) {
   .masthead { flex-direction: column; gap: 18px; }
@@ -454,6 +461,7 @@ body:not(.home-page) .contact-bar {
   font-size: clamp(13px, 1.1vw, 15px);
   color: var(--muted);
   letter-spacing: -0.01em;
+  text-wrap: pretty;
 }
 
 /* href 없는 상위 메뉴: 클릭 불가 표시 */
