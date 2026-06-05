@@ -53,3 +53,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 드롭다운 내부 클릭 시 닫기 전파 막지 않음 (링크 클릭 허용)
 });
+
+// ── 라이브 웹 임베드: 데스크톱 페이지를 박스 폭에 맞춰 축소 ──
+document.addEventListener('DOMContentLoaded', () => {
+  const BASE_W = 1280; // .live-frame iframe 의 기준 폭(px)
+  const frames = document.querySelectorAll('.live-frame');
+  if (!frames.length) return;
+
+  const fit = () => {
+    frames.forEach(frame => {
+      const iframe = frame.querySelector('iframe');
+      if (!iframe) return;
+      const scale = frame.clientWidth / BASE_W;
+      iframe.style.transform = `scale(${scale})`;
+    });
+  };
+
+  fit();
+  window.addEventListener('resize', fit);
+  // 폰트/레이아웃 로딩 후 한 번 더 보정
+  window.addEventListener('load', fit);
+  if ('ResizeObserver' in window) {
+    const ro = new ResizeObserver(fit);
+    frames.forEach(f => ro.observe(f));
+  }
+});
