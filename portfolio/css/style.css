@@ -168,6 +168,15 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(13px, 1.2vw, 16px);
   color: var(--muted);
 }
+/* 작가 상세 상단: CV처럼 작은 회색 연락처 */
+.page-head .pcontact {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.page-head .pcontact a { color: var(--muted); transition: color .2s; }
+.page-head .pcontact a:hover { color: var(--fg); }
 
 /* =========================================================
    홈 — 큰 사진(중앙) + 연락처(하단 고정)
@@ -198,15 +207,15 @@ body.home-page .home-stage { flex: 1 1 auto; }
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 15px;             /* 이미지 사이 간격 */
+  gap: clamp(40px, 7vw, 96px);  /* 이미지 사이 여백 크게 */
   flex-wrap: wrap;       /* 화면 좁아지면 아래로 떨어지게 */
 }
 
-/* 2. 여기를 수정: 100% 설정을 해제하고 고정 크기를 줍니다 */
+/* 2. 100px 고정 (150px의 1/3 축소) */
 .home-media img {
-  width: 150px !important;  /* 상단 img {width:100%} 설정을 무시하고 150px 고정 */
-  height: 150px;            /* 세로 크기도 맞추고 싶다면 지정 (선택사항) */
-  object-fit: cover;        /* 비율 유지하며 예쁘게 꽉 채우기 */
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
   max-height: 64vh;
 }
 
@@ -377,6 +386,39 @@ body:not(.home-page) .contact-bar {
 .piece-year { color: var(--muted); font-size: 13px; margin-top: 6px; }
 .piece-desc { color: var(--fg); line-height: 1.7; max-width: 62ch; }
 
+/* 실제 작동 웹을 이미지처럼 임베드 (데스크톱 페이지를 축소 렌더) */
+.piece-media.live {
+  background: #fafafa;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(12px, 1.5vw, 20px);
+}
+.live-frame {
+  position: relative;
+  flex: 1 1 320px;
+  /* 데스크톱(1280px)을 비율 유지하며 박스 폭에 맞춰 축소 */
+  aspect-ratio: 1280 / 800;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.live-frame iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1280px;
+  height: 800px;
+  border: 0;
+  transform-origin: top left;
+  /* JS가 박스 폭에 맞춰 scale 값을 설정 */
+}
+.live-cap {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+  text-align: center;
+}
+
 /* =========================================================
    CV / About 페이지
    ========================================================= */
@@ -442,18 +484,35 @@ body:not(.home-page) .contact-bar {
 .fade.in { opacity: 1; transform: none; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
 
 .home-media {
-  display: flex;         /* 내부 요소를 가로로 나열 */
-  flex-direction: row;   /* 왼쪽에서 오른쪽으로 정렬 (기본값) */
-  justify-content: center; /* 이미지들을 가운데로 정렬 (좌측 정렬은 flex-start) */
-  align-items: center;   /* 이미지들의 세로 기준 중앙 정렬 */
-  gap: 15px;             /* 이미지와 이미지 사이의 간격 (원하는 대로 조절 가능) */
-  flex-wrap: wrap;       /* 화면이 좁아지면 자연스럽게 다음 줄로 넘어가게 설정 */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(40px, 7vw, 96px);  /* 이미지는 작아지고 사이 여백은 더 크게 */
+  flex-wrap: wrap;
+}
+
+/* 클릭 가능한 이미지 + 알파벳 태그 */
+.home-fig {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.home-fig:hover { opacity: .82; transform: translateY(-3px); }
+.home-fig-tag {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
 }
 
 .home-media img {
-  width: 150px;          /* 이미지의 가로 크기를 제한 (정렬이 깨지지 않게 중요!) */
-  height: auto;          /* 가로 비율에 맞춰 세로 크기 자동 조절 */
-  object-fit: cover;     /* 이미지 비율 유지 */
+  width: 100px;          /* 150px의 1/3 축소 → 독립적으로 작아짐 */
+  height: 100px;
+  object-fit: cover;
+  max-height: 64vh;
 }
 /* 메인 zip² 소개 문구 */
 .home-intro {
